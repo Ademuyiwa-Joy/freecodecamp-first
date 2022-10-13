@@ -30,15 +30,16 @@ let responseObject = {}
 
 app.get('/api/:date', (req, res) => {
   let myDate = req.params.date
+  let parsedInDate = new Date(myDate)
 
-  if(myDate.includes('-')){ 
-      responseObject["unix"] = new Date(myDate).getTime()
-      responseObject["utc"] = new Date(myDate).toUTCString() 
+  if(parsedInDate.includes('-')){ 
+      responseObject["unix"] = new Date(parsedInDate).getTime()
+      responseObject["utc"] = new Date(parsedInDate).toUTCString() 
   }
   else{
-    myDate = parseInt(myDate)
-    responseObject["unix"] = new Date(myDate).getTime()
-    responseObject["utc"] = new Date(myDate).toUTCString()
+    parsedInDate = parseInt(parsedInDate)
+    responseObject["unix"] = new Date(parsedInDate).getTime()
+    responseObject["utc"] = new Date(parsedInDate).toUTCString()
   }
   if(!responseObject["unix"] || !responseObject["utc"]){
     res.json({error: "Invalid Date"})
