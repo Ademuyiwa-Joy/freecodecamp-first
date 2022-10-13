@@ -29,23 +29,24 @@ app.get("/api/hello", function (req, res) {
 let responseObject = {}
 
 app.get('/api/:date', (req, res) => {
-  let myDate = req.params.date
-  let parsedInDate = new Date(myDate)
+  let date_String = req.params.date
 
-  if(parsedInDate.includes('-')){ 
-      responseObject["unix"] = new Date(parsedInDate).getTime()
-      responseObject["utc"] = new Date(parsedInDate).toUTCString() 
+  if(parseInt(date_String) > 10000){
+    let unix_time = new Date(parseInt(date_String))
+    res.json({unix: unix_time.getTime(), utc: unix_time.toUTCString()})
   }
-  else{
-    parsedInDate = parseInt(parsedInDate)
-    responseObject["unix"] = new Date(parsedInDate).getTime()
-    responseObject["utc"] = new Date(parsedInDate).toUTCString()
-  }
-  if(!responseObject["unix"] || !responseObject["utc"]){
+
+  let passedInValue = new Date(date_String)
+
+  if(passedInValue == "Invalid Date"){
     res.json({error: "Invalid Date"})
   }
-
-  res.json(responseObject)
+  else{
+    res.json({
+      unix: passedInValue.getTime(),
+      utc: passedInValue.toUTCString()
+    })
+  }
 })
 
 app.get("/api", (req, res) => {
